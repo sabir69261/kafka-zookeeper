@@ -1,11 +1,11 @@
 #Change the broker id 
-{% for host in groups['kafka'] %}
+{% for host in groups['kafka_servers'] %}
 {%   if inventory_hostname == host %}
 broker.id={{ loop.index }}
 {%   endif %}
 {% endfor %}
 #Change the internal IP
-{% for host in groups['kafka'] %}
+{% for host in groups['kafka_servers'] %}
 {%   if inventory_hostname == host %}
 listeners=PLAINTEXT://{{ ansible_default_ipv4.address }}:9092
 advertised.listeners=PLAINTEXT://{{ ansible_default_ipv4.address }}:9092
@@ -21,7 +21,6 @@ log.segment.bytes=2147483647
 log.retention.check.interval.ms=300000
 
 ############################# Zookeeper #############################
-#zookeeper.connect=zk-01.us-central1-a.c.cloudside-academy.internal:2181,zk-02.us-central1-a.c.cloudside-academy.internal:2181,zk-03.us-central1-a.c.cloudside-academy.internal:2181
 zookeeper.connect={% for host in groups['zookeeper_servers'] %}{{ hostvars[host].ansible_fqdn }}:2181{% if not loop.last %},{% endif %}{% endfor %}
 
 

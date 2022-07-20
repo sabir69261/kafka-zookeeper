@@ -3,7 +3,7 @@
 <zookeeper_server_2_ip>   ansible_python_interpreter=/usr/bin/python3
 <zookeeper_server_3_ip>  ansible_python_interpreter=/usr/bin/python3
 
-[kafka]
+[kafka_servers]
 <kafka_server_1_ip>   ansible_python_interpreter=/usr/bin/python3
 <kafka_server_2_ip>    ansible_python_interpreter=/usr/bin/python3
 <kafka_server_3_ip>   ansible_python_interpreter=/usr/bin/python3
