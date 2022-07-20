@@ -1,0 +1,9 @@
+---
+- hosts: zookeeper_servers
+  roles:
+     - role: "zookeeper"
+
+- hosts: kafka
+  roles:
+     - role: "kafka"
+

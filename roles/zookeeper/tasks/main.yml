@@ -1,0 +1,77 @@
+---
+# tasks file for zookeeper
+- name: Update the shell 
+  shell: "sudo apt-get update"
+
+- name: Install the jdk
+  package:
+    name: default-jdk
+    state: present
+
+- name: Create zookeeper user
+  user:
+    name: "{{ zookeeper_user }}"
+    state: present
+     
+- name: Create ZooKeeper data direcotry /data/zookeeper
+  file:
+    path: "{{ zookeeper_data_dir }}"
+    state: directory
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+    mode: 0755
+
+- name: Create ZooKeeper direcotry /opt/zookeeper
+  file:
+    path: "{{ zookeeper_dir }}"
+    state: directory
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+    mode: 0755
+
+
+- name: Download Apache ZooKeeper
+  get_url:
+    url: "{{ zookeeper_version_url }}"
+    dest: /opt
+
+- name: Unpack Apache ZooKeeper
+  unarchive:
+    src: /opt/{{ zookeeper_version }}
+    dest: "/opt/zookeeper"
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+       
+- name: Template configuration file to zoo.cfg
+  template:
+    src: zoo.cfg.j2
+    dest: "/opt/zookeeper/conf/zoo.cfg"
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+    mode: 0644
+
+- name: Template myid to
+  template:
+    src: myid.j2
+    dest: "/data/zookeeper/myid"
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+    mode: 0644
+
+- name: Template ZooKeeper systemd service file
+  template:
+    src: zookeeper.service.j2
+    dest: "/etc/systemd/system/zookeeper.service"
+    group: "{{ zookeeper_group }}"
+    owner: "{{ zookeeper_user }}"
+    mode: 0644
+
+
+- name: Start the ZooKeeper service
+  systemd:
+    name: zookeeper.service
+    state: started
+    enabled: yes
+

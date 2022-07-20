@@ -1,0 +1,73 @@
+---
+
+- name: Update the shell 
+  shell: "sudo apt-get update"
+
+- name: Install the jdk
+  package:
+    name: default-jdk
+    state: present
+
+- name: Create kafka user
+  user:
+    name: "{{ kafka_user }}"
+    state: present
+     
+- name: Create kafka data  direcotry 
+  file:
+    path: "{{ kafka_data_dir }}"
+    state: directory
+    group: "{{ kafka_group }}"
+    owner: "{{ kafka_user }}"
+    mode: 0755
+
+- name: Create kafka logs direcotry
+  file:
+    path: "{{ kafka_logs_dir }}"
+    state: directory
+    group: "{{ kafka_group }}"
+    owner: "{{ kafka_user }}"
+    mode: 0755
+
+
+- name: Download Apache kafka
+  get_url:
+    url: "{{ kafka_package_url }}"
+    dest: /opt
+
+- name: Unpack Apache kafka
+  unarchive:
+    src: "/opt/{{ kafka_package_name }}"
+    dest: "{{ kafka_data_dir }}"
+    group: "{{ kafka_group }}"
+    owner: "{{ kafka_user }}"
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+- name: Remove default kafka Config file 
+  file: 
+    path: "{{ kafka_data_dir }}/config/server.properties"
+    state: absent
+
+- name: Template configuration file to server.properties
+  template:
+    src: server.properties.j2
+    dest: "{{ kafka_data_dir }}/config/server.properties"
+    group: "{{ kafka_group }}"
+    owner: "{{ kafka_user }}"
+    mode: 0644
+
+- name: Template kafka systemd service file
+  template:
+    src: kafka.service.j2
+    dest: "/etc/systemd/system/kafka.service"
+    group: "{{ kafka_group }}"
+    owner: "{{ kafka_user }}"
+    mode: 0644
+
+- name: Start the kafka service
+  systemd:
+    name: kafka.service
+    state: started
+    enabled: yes
+

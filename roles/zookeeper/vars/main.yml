@@ -1,0 +1,15 @@
+---
+# vars file for zookeeper
+zookeeper_ticktime: 2000
+zookeeper_data_dir: "/data/zookeeper"
+zookeeper_clientPort: 2181
+zookeeper_initLimit: 10
+zookeeper_syncLimit: 5
+zookeeper_leader_port: 2888
+zookeeper_election_port: 3888
+zookeeper_user: zkadmin
+zookeeper_group: zkadmin
+zookeeper_version_url: "https://dlcdn.apache.org/zookeeper/zookeeper-3.6.3/apache-zookeeper-3.6.3-bin.tar.gz"
+zookeeper_version: "apache-zookeeper-3.6.3-bin.tar.gz"
+zookeeper_dir: "/opt/zookeeper"
+

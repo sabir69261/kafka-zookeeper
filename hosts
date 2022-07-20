@@ -1,0 +1,12 @@
+[zookeeper_servers]
+34.136.255.186  ansible_python_interpreter=/usr/bin/python3
+146.148.92.171   ansible_python_interpreter=/usr/bin/python3
+34.133.177.183  ansible_python_interpreter=/usr/bin/python3
+
+[kafka]
+35.193.177.44   ansible_python_interpreter=/usr/bin/python3
+35.224.55.169    ansible_python_interpreter=/usr/bin/python3
+34.123.4.220   ansible_python_interpreter=/usr/bin/python3
+
+
+
