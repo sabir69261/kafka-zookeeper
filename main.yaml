@@ -3,7 +3,7 @@
   roles:
      - role: "zookeeper"
 
-- hosts: kafka
+- hosts: kafka_servers
   roles:
      - role: "kafka"
 
